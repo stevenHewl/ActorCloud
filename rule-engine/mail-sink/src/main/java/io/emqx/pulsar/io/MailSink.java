@@ -18,6 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+// 输出邮件数据
+
 @Slf4j
 public class MailSink implements Sink<String> {
 

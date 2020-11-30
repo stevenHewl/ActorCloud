@@ -7,10 +7,10 @@ from actor_libs.errors import (
 )
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import (
-    User, Product, DataPoint
-)
-from . import bp
+from app.services.base.models import User
+from app.services.products.models import Product, DataPoint
+
+from app.services.products.views import bp
 from ..schemas import DataPointSchema, DataPointUpdateSchema
 
 

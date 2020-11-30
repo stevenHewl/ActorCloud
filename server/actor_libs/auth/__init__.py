@@ -5,11 +5,10 @@ from typing import List
 from flask import request
 from werkzeug.datastructures import Authorization
 
-from app.models import Resource
+from app.services.base.models import Resource
 from .base import basic_auth, token_auth
 from .resources import base_query_resources, parse_request_path
 from ..errors import AuthFailed, PermissionDenied
-
 
 __all__ = ['HttpAuth']
 

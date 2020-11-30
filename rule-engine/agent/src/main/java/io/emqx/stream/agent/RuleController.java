@@ -95,6 +95,7 @@ class RuleController {
     }
     return output;
   }
+
   private RuleFeature analyzeSql(String sql) throws Exception {
     RuleFeature feature = new RuleFeature();
     Select select;

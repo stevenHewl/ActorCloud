@@ -13,7 +13,7 @@ from string import ascii_letters, digits
 import requests
 
 from app import create_app
-from app.models import User
+from app.services.base.models import User
 
 
 class TestCase(unittest.TestCase):

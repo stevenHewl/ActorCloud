@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+// 和common一样是共用类，给其它类调用
+
 public final class SqlFunctionProvider {
   private static Map<String, SqlFunction> functions;
 

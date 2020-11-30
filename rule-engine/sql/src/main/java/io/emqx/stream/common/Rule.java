@@ -25,6 +25,7 @@ public class Rule implements IRule {
   @SuppressWarnings({"unchecked", "WeakerAccess"})
   public Rule(Map<String, Object> payload, Logger logger) throws JSQLParserException {
     String sql = (String) payload.get("sql");
+    //logger.info("payload:" + JsonParser.toJson(payload));
     engine = new SqlEngine(sql, logger);
     actions = (List<Map<String, Object>>) payload.get("actions");
   }

@@ -10,12 +10,14 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ParameterInvalid
 from actor_libs.utils import get_charts_config
 from app import auth
-from app.models import (
-    Device, EndDevice, Gateway, Product, Group, ConnectLog,
+from app.services.devices.models import (
+    Device, EndDevice, Gateway, Group,
     DeviceCountHour, DeviceCountDay, DeviceCountMonth,
     EmqxBillHour, EmqxBillDay, EmqxBillMonth
 )
-from . import bp
+from app.services.products.models import Product
+from app.services.device_data.models import ConnectLog
+from app.services.base.views import bp
 
 
 @bp.route('/overview/current_count')

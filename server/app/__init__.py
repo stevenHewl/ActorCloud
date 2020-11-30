@@ -1,5 +1,5 @@
 from importlib import import_module
-
+import importlib.util
 from flask import request, g, current_app
 from flask_cors import CORS
 from flask_mail import Mail
@@ -17,6 +17,7 @@ from actor_libs.utils import get_services_path
 from config import FlaskConfig
 from .base import CustomFlask
 
+import os
 
 auth = HttpAuth()
 mail = Mail()
@@ -39,22 +40,22 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db, compare_type=True)
     cros.init_app(app)
-    mail.init_app(app)
+    # mail.init_app(app)
     configure_uploads(app, (images, excels, packages))
 
-    register_blueprints()
+    register_blueprints2()
     register_not_found()
 
     # register extend private app
     try:
         from .private_services import extend_private_app
-
         extend_private_app(app)
     except ImportError:
         pass
     return app
 
 
+# 在linux服务器上可用
 def register_blueprints():
     active_services = get_services_path()
     for key, value in active_services.items():
@@ -63,6 +64,25 @@ def register_blueprints():
         views_module = import_module(service_views_path)
         if hasattr(views_module, 'bp'):
             app.register_blueprint(views_module.bp, url_prefix='/api/v1')
+
+
+# 在windows开发环境可用
+def register_blueprints2():
+    active_services = get_services_path()
+    for key, value in active_services.items():
+        schemas_path = os.path.join(value, 'views\\' + key + '.py')
+        if not os.path.exists(schemas_path):
+            continue
+        views_module = path_import(schemas_path)
+        if hasattr(views_module, 'bp'):
+            app.register_blueprint(views_module.bp, url_prefix='/api/v1')
+
+
+def path_import(absolute_path):
+    spec = importlib.util.spec_from_file_location(absolute_path, absolute_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def register_not_found():

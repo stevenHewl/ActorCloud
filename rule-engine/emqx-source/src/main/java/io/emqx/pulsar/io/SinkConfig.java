@@ -24,6 +24,8 @@ public class SinkConfig implements Serializable {
   private String brokerUrl = "tcp://localhost:1883";
   private String outputTopic;
   private String ruleId;
+  private String userName;
+  private String password;
 
   public static SinkConfig load(Map<String, Object> map) {
     return new Gson().fromJson(new Gson().toJson(map), SinkConfig.class);

@@ -5,9 +5,10 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ReferencedError
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import Device, Group, GroupDevice, User, EndDevice, Gateway
-from app.schemas import GroupSchema, GroupDeviceSchema
-from . import bp
+from app.services.devices.models import Device, Group, GroupDevice, EndDevice, Gateway
+from app.services.base.models import User
+from app.services.devices.schemas import GroupSchema, GroupDeviceSchema
+from app.services.devices.views import bp
 
 
 @bp.route('/groups')

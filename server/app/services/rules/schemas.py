@@ -21,10 +21,9 @@ from actor_libs.schemas.fields import (
 )
 from app import logger
 from actor_libs.utils import generate_uuid
-from app.models import (
-    Product, Rule, Device, Action, DataStream
-)
-
+from app.services.devices.models import Device, Lwm2mItem
+from app.services.products.models import Product, DataStream
+from app.services.rules.models import Rule, Action
 
 __all__ = [
     'RuleSchema', 'ActionSchema', 'AlertActionSchema', 'UpdateRuleSchema',

@@ -6,9 +6,11 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ReferencedError
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import DataPoint, DataStream, Device, Product, User
-from app.schemas import ProductSchema, UpdateProductSchema
-from . import bp
+from app.services.devices.models import Device
+from app.services.products.models import DataPoint, DataStream, Product
+from app.services.base.models import User
+from app.services.products.schemas import ProductSchema, UpdateProductSchema
+from app.services.products.views import bp
 
 
 @bp.route('/products')

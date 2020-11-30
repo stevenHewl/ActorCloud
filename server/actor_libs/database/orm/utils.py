@@ -99,7 +99,7 @@ def base_filter_tenant(model, query, tenant_uid):
         return query
 
     if hasattr(model, 'userIntID'):
-        from app.models import User
+        from app.services.base.models import User
 
         mapper = inspect(User)
         # inspect model is join user query
@@ -108,7 +108,7 @@ def base_filter_tenant(model, query, tenant_uid):
         query = query.filter(User.tenantID == tenant_uid)
     elif hasattr(model, 'tenantID'):
         if model.__name__ == 'Role':
-            from app.models import Role
+            from app.services.base.models import Role
 
             query = query.filter(or_(Role.tenantID == tenant_uid, Role.isShare == 1))
         else:
@@ -131,7 +131,8 @@ def filter_api(model, query):
     if not any([group_uid_attr, device_uid_attr, device_id_attr]):
         return query
 
-    from app.models import ApplicationGroup, Group, GroupDevice, Device
+    from app.services.devices.models import Group, GroupDevice, Device
+    from app.services.applications.models import ApplicationGroup
 
     app_groups = Group.query \
         .join(ApplicationGroup, ApplicationGroup.c.groupID == Group.groupID) \
@@ -170,7 +171,8 @@ def filter_group(model, query):
     if not any([group_uid_attr, device_uid_attr, device_id_attr]):
         return query
 
-    from app.models import UserGroup, GroupDevice, Device, Group
+    from app.services.base.models import UserGroup
+    from app.services.devices.models import GroupDevice, Device, Group
 
     user_groups = Group.query \
         .join(UserGroup, UserGroup.c.groupID == Group.groupID) \

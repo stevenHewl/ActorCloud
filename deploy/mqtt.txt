@@ -1,0 +1,237 @@
+
+mqtt: MQTT Broker 比较与选型
+https://wivwiv.com/post/best-mqtt-broker/
+
+几个MQTT的知识点:
+https://www.cnblogs.com/znlgis/p/4930990.html
+
+MQTT系列 | MQTT的QoS介绍:
+https://zhuanlan.zhihu.com/p/80203905
+
+EMQX:
+https://www.cnblogs.com/emqx/p/11799138.html
+
+
+EMQ 官网：https://www.emqx.io/cn/downloads#broker
+
+chmod -R 755 emqx（目录）
+
+./bin/emqx start
+./bin/emqx_ctl status
+./bin/emqx stop
+
+Start http:management listener on 8081 successfully.
+Start http:dashboard listener on 18083 successfully.
+Start mqtt:tcp listener on 127.0.0.1:11883 successfully.
+Start mqtt:tcp listener on 0.0.0.0:1883 successfully.
+Start mqtt:ws listener on 0.0.0.0:8083 successfully.
+Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
+Start mqtt:wss listener on 0.0.0.0:8084 successfully.
+
+
+
+curl -i --basic -u 0d3bd94a11e57:Mjk1ODQzNDIyODU1MzM4NzM0MDU3ODU3MDc3NDc5OTk3NDE -X GET "http://localhost:8081/api/v4/brokers" 
+
+
+ActorCloud:
+https://zhuanlan.zhihu.com/p/76943387
+https://github.com/actorcloud/ActorCloud
+https://docs.actorcloud.io/zh/installation/timescaledb.html
+https://docs.actorcloud.io/zh/installation/single_node.html
+
+pulsar文档: Apache Pulsar 用于存储事件数据流，而事件数据是以预定义的字段结构化的。
+http://pulsar.apache.org/docs/zh-CN/next/sql-overview/
+https://www.codercto.com/a/42959.html
+
+
+
+docker run -it -p 6650:6650 -p 8080:8080 --mount source=data,target=/pulsar/data --mount source=conf,target=/pulsar/conf apachepulsar/pulsar:2.6.1
+
+docker cp /disk4/pulsar/rule_engine 50e2fae1913f:/pulsar
+
+
+./bin/pulsar-admin source create --className io.emqx.pulsar.io.EMQXSource --archive /pulsar/rule_engine/emqx-source-0.5.3.nar --tenant public --namespace default --name __source_emqx_all --destinationTopicName persistent://public/default/__emqx_all --source-config-file /pulsar/rule_engine/emqx-config.yml --parallelism 1
+
+./bin/pulsar-admin source localrun --className EMQXSource -a /pulsar/rule_engine/emqx-source-0.5.3.nar --tenant public --namespace default --name emqx-source --destinationTopicName tttoxic
+
+
+Pulsar 运行
+./bin/pulsar-daemon start standalone
+
+
+postgresql:
+下载安装：
+https://www.postgresql.org/download/linux/redhat/
+
+
+安装目录：
+/usr/pgsql-12/bin/
+Created symlink from /etc/systemd/system/multi-user.target.wants/postgresql-12.service to /usr/lib/systemd/system/postgresql-12.service.
+/var/lib/pgsql/12/data/
+
+删除：yum erase postgresql12*
+
+在线文档：
+http://www.postgres.cn/v2/document
+
+创建用户：
+https://blog.csdn.net/far_from_home/article/details/72053419
+
+
+\h：查看SQL命令的解释，比如\h select。
+\?：查看psql命令列表。
+\l：列出所有数据库。
+\c [database_name]：连接其他数据库。
+\d：列出当前数据库的所有表格。
+\d [table_name]：列出某一张表格的结构。
+\du：列出所有用户。
+\e：打开文本编辑器。
+\conninfo：列出当前数据库和连接的信息。
+
+
+方括弧（[和]）表示可选的部分。 
+花括弧（{和}）和竖线（|）表示你必须选取一个候选。 
+点（...）表示它前面的元素可以被重复。
+
+
+TimescaleDB时序数据库介绍：
+https://www.jianshu.com/p/eafe476027bd
+
+最近关于TimescaleDB的一系列文章：
+https://www.jianshu.com/p/8201805534db
+
+timescaledb：
+https://github.com/timescale/timescaledb
+
+install TimescaleDB：
+https://docs.timescale.com/latest/getting-started/installation/rhel-centos/installation-yum
+
+
+python2.7.5 升级为Python3.7 :
+https://www.liaotaoo.cn/243.html
+https://www.jianshu.com/p/9e40e9e1275b
+
+安装python2.7.15
+https://www.cnblogs.com/Jomini/p/10507077.html
+
+
+pipenv: pipenv是由Kenneth Reitz编写，用于管理虚拟环境的工具。
+https://www.cnblogs.com/blueberry-mint/p/13362737.html
+
+创建虚拟环境:创建虚拟环境的过程两步即可实现：一、进入到项目目录；二、运行pipenv install 命令。
+
+初始化虚拟环境：pipenv install --skip-lock
+创建虚拟化环境：pipenv shell
+
+默认虚拟化环境路径：/root/.local/share/
+
+查询虚拟环境位置：pipenv --venv
+
+安装依赖包到虚拟环境：pipenv install requests
+
+查看已安装的包：pipenv graph
+
+删除依赖包：pipenv uninstall requests
+
+删除虚拟环境： pipenv --rm
+
+=================================================================================================================
+Server 初始化:
+pipenv run flask deploy
+
+解决：flask文件中 from werkzeug import secure_filename,FileStorage 报错cannot import name ‘FileStorage’
+
+如果出现cannot import secure_filename把from werkzeug 改为from werkzeug.utils即可
+如果改完出现cannot import name ‘FileStorage’
+将其分两行写：
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
+
+FileStorage在werkzeug.datastructures 下面
+
+===================================================================================================================
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not connect to server: Connection refused
+        Is the server running on host "Zac92" (127.0.1.1) and accepting
+        TCP/IP connections on port 5432?
+
+https://blog.csdn.net/king0406/article/details/54405457?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
+
+
+====================================================================================================================
+
+psql: 致命错误: 用户 "postgres" Ident 认证失败:
+https://blog.csdn.net/sanbingyutuoniao123/article/details/52209653?locationNum=6&fps=1
+
+===================================================================================================================
+
+
+
+Supervisor使用详解: Supervisor是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。
+https://www.jianshu.com/p/0b9054b33db3
+
+Supervisor安装与配置：
+https://www.cnblogs.com/onlyzc/p/10033832.html
+
+https://www.cnblogs.com/yjlch1016/p/10162918.html
+
+开机自启
+systemctl enable supervisord
+
+启动supervisord
+systemctl start supervisord
+
+查看状态
+systemctl status supervisord
+
+重新加载配置文件  :  /etc/supervisord.conf
+supervisorctl reload
+
+supervisorctl
+> status           #查看程序状态
+> stop name    #关闭name程序
+> start name    #启动name程序
+> restart name # 重启name程序
+> reread          ＃读取有更新的配置文件，不会启动新添加的程序
+> update          #重启配置文件修改过的程序
+
+
+
+
+
+
+
+
+
+数据库架构之【MySQL8+MyCat2+Keepalived】RDBMS 读写分离和分库分表集群方案
+https://www.jianshu.com/p/594c27f60200
+
+
+膜拜！阿里内部都在强推的K8S(kubernetes)学习指南，不能再详细了
+https://www.jianshu.com/p/acca7b3b4e31
+
+
+
+Mosquitto
+
+安装：
+https://cloud.tencent.com/developer/article/1161563
+
+1、yum -y install epel-release
+2、yum -y install mosquitto
+
+3、运行它来测试我们的安装 systemctl start mosquitto
+
+4、启用服务，以确保它在重新启动系统时启动  systemctl enable mosquitto
+
+测试：
+
+-h用于指定MQTT服务器的主机名，-t是主题名 -m选项来指定我们的消息
+
+1、订阅一个主题：  mosquitto_sub -h localhost -t test
+
+2、到另一个终端发布消息：mosquitto_pub -h localhost -t test -m "hello world"
+
+
+
+
+

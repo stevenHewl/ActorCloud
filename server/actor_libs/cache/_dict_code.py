@@ -7,7 +7,7 @@ __all__ = ['cache_dict_code']
 
 
 def cache_dict_code() -> DictCodeCache:
-    from app.models import DictCode
+    from app.services.base.models import DictCode
 
     record = defaultdict(dict)
     dict_code_values = DictCode.query.all()

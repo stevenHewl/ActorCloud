@@ -7,13 +7,14 @@ from actor_libs.database.orm import db
 from actor_libs.errors import DataNotFound, APIException
 from actor_libs.schemas import BaseSchema
 from actor_libs.schemas.fields import EmqString, EmqInteger
-from app.models import Rule, Device
+from app.services.rules.models import Rule
+from app.services.devices.models import Device
 
 
 __all__ = ['CurrentAlertSchema', 'HistoryAlertSchema']
 
 
-class CurrentAlertSchema(BaseSchema):
+class CurrentAlertSchema(BaseSchema):  # 继承父类
     class Meta:
         additional = (
             'alertName', 'alertContent', 'alertDetail', 'alertSeverity', 'startTime'

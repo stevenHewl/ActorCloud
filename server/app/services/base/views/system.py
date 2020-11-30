@@ -7,9 +7,9 @@ from flask import (
 from actor_libs.database.orm import db
 from actor_libs.errors import APIException, DataNotFound
 from app import auth
-from app.models import SystemInfo, UploadInfo
-from app.schemas import LogoInfoSchema
-from . import bp
+from app.services.base.models import SystemInfo, UploadInfo
+from app.services.base.schemas import LogoInfoSchema
+from app.services.base.views import bp
 
 
 @bp.route('/system_info')

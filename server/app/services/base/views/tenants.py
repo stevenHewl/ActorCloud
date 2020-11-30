@@ -4,8 +4,8 @@ from sqlalchemy import func
 from actor_libs.database.orm import db
 from actor_libs.errors import APIException, FormInvalid, DataNotFound
 from app import auth
-from app.models import User, Tenant
-from . import bp
+from app.services.base.models import User, Tenant
+from app.services.base.views import bp
 from ..schemas import TenantUpdateSchema
 
 

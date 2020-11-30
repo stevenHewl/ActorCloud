@@ -257,6 +257,7 @@
               </el-input>
             </el-form-item>
           </el-col>
+
           <el-col v-if="record.actionType === $variable.actionType.MQTT" :span="12">
             <el-form-item
               prop="config.topic"
@@ -278,6 +279,7 @@
               </el-form-item>
             </el-col>
           </div>
+
           <el-col :span="12">
             <el-form-item prop="description" :label="$t('actions.description')">
               <el-input v-model="record.description" :plceholder="disabled ? '' : $t('actions.description')"></el-input>

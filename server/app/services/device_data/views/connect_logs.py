@@ -2,8 +2,9 @@ from flask import jsonify, request
 from sqlalchemy import text
 
 from app import auth
-from app.models import Device, ConnectLog
-from . import bp
+from app.services.devices.models import Device
+from app.services.device_data.models import ConnectLog
+from app.services.device_data.views import bp
 
 
 @bp.route('/devices/<int:device_id>/connect_logs')

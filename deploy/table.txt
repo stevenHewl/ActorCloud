@@ -1,0 +1,55 @@
+ public   | actions                   | 数据表 | actorcloud
+ public   | actor_tasks               | 数据表 | actorcloud
+ public   | alembic_version           | 数据表 | actorcloud
+ public   | app_api_logs              | 数据表 | actorcloud
+ public   | app_api_logs_day          | 数据表 | actorcloud
+ public   | app_api_logs_hour         | 数据表 | actorcloud
+ public   | app_api_logs_month        | 数据表 | actorcloud
+ public   | applications              | 数据表 | actorcloud
+ public   | applications_groups       | 数据表 | actorcloud
+ public   | certs                     | 数据表 | actorcloud
+ public   | certs_devices             | 数据表 | actorcloud
+ public   | codec                     | 数据表 | actorcloud
+ public   | connect_logs              | 数据表 | actorcloud
+ public   | current_alerts            | 数据表 | actorcloud
+ public   | data_points               | 数据表 | actorcloud
+ public   | data_streams              | 数据表 | actorcloud
+ public   | device_count_day          | 数据表 | actorcloud
+ public   | device_count_hour         | 数据表 | actorcloud
+ public   | device_count_month        | 数据表 | actorcloud
+ public   | device_events             | 数据表 | actorcloud
+ public   | device_events_day         | 数据表 | actorcloud
+ public   | device_events_hour        | 数据表 | actorcloud
+ public   | device_events_latest      | 数据表 | actorcloud
+ public   | device_events_month       | 数据表 | actorcloud
+ public   | devices                   | 数据表 | actorcloud
+ public   | dict_code                 | 数据表 | actorcloud  翻译字典
+ public   | emqx_bills                | 数据表 | actorcloud
+ public   | emqx_bills_day            | 数据表 | actorcloud
+ public   | emqx_bills_hour           | 数据表 | actorcloud
+ public   | emqx_bills_month          | 数据表 | actorcloud
+ public   | end_devices               | 数据表 | actorcloud
+ public   | gateways                  | 数据表 | actorcloud
+ public   | groups                    | 数据表 | actorcloud
+ public   | groups_devices            | 数据表 | actorcloud
+ public   | history_alerts            | 数据表 | actorcloud
+ public   | invitations               | 数据表 | actorcloud
+ public   | login_logs                | 数据表 | actorcloud
+ public   | lwm2m_items               | 数据表 | actorcloud
+ public   | lwm2m_objects             | 数据表 | actorcloud
+ public   | messages                  | 数据表 | actorcloud
+ public   | permissions               | 数据表 | actorcloud  权限
+ public   | products                  | 数据表 | actorcloud
+ public   | publish_logs              | 数据表 | actorcloud
+ public   | resources                 | 数据表 | actorcloud  菜单
+ public   | roles                     | 数据表 | actorcloud
+ public   | rules                     | 数据表 | actorcloud
+ public   | rules_actions             | 数据表 | actorcloud
+ public   | services                  | 数据表 | actorcloud
+ public   | streams_points            | 数据表 | actorcloud
+ public   | system_info               | 数据表 | actorcloud
+ public   | tenants                   | 数据表 | actorcloud  企业信息
+ public   | timer_publish             | 数据表 | actorcloud
+ public   | upload_info               | 数据表 | actorcloud
+ public   | users                     | 数据表 | actorcloud
+ public   | users_groups              | 数据表 | actorcloud

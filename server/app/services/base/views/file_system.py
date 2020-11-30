@@ -7,8 +7,8 @@ from flask_uploads import UploadNotAllowed
 from actor_libs.decorators import limit_upload_file
 from actor_libs.errors import APIException, ParameterInvalid
 from app import auth, images, packages
-from app.models import UploadInfo
-from . import bp
+from app.services.base.models import UploadInfo
+from app.services.base.views import bp
 
 
 @bp.route('/download')

@@ -3,8 +3,8 @@ from flask import g
 from actor_libs.database.orm import db
 from actor_libs.database.sql.base import fetch_many
 from actor_libs.errors import ParameterInvalid
-from app.models import ApplicationGroup, GroupDevice, Application
-
+from app.services.applications.models import ApplicationGroup, Application
+from app.services.devices.models import GroupDevice
 
 __all__ = ['devices_event_aggr_data']
 

@@ -6,14 +6,18 @@ from .sql_statements import (
     insert_connect_logs_sql, update_device_sql
 )
 from ..extra import HttpException
-
+from actor_libs.logs import create_logger
+logger = create_logger('backend', log_level='info')
 
 __all__ = ['device_auth']
 
 
 async def device_auth(request_form):
-    device_uid = request_form.get('device_id')
+    device_uid = request_form.get('username')
     cn = request_form.get('cn')
+
+    logger.info(request_form)
+
     connect_date = str(datetime.now())
     if cn and cn != 'undefined':
         query_sql = device_cert_auth_sql.format(
@@ -25,12 +29,23 @@ async def device_auth(request_form):
             deviceID=device_uid
         )
         auth_type = 1
+
+    logger.info(query_sql)
+
     query_result = await db.fetch_row(query_sql)
+
     if not query_result:
         raise HttpException(404, field='device')
+
+    logger.info("row 37")
+
     device_info = dict(query_result)
+
     if auth_type != device_info['authType']:
         raise HttpException(404, field='authType')
+
+    logger.info("row 44")
+
     if device_info['protocol'] == 'lwm2m' or auth_type == 2:
         auth_status = True
     elif all([auth_type == 1,

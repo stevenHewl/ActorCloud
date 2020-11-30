@@ -10,10 +10,9 @@ from yaml.loader import FullLoader
 
 from actor_libs.database.orm import db
 from actor_libs.utils import get_cwd, get_services_path
-from app.models import (
-    DictCode, SystemInfo, User, Resource, Service,
-    Lwm2mObject, Lwm2mItem
-)
+from app.services.base.models import (
+    DictCode, SystemInfo, User, Resource, Service)
+from app.services.devices.models import Lwm2mObject, Lwm2mItem
 
 
 __all__ = [

@@ -30,20 +30,20 @@ public class EMQXSink implements Sink<String> {
         // Construct the connection options object that contains connection parameters
         // such as cleanSession and LWT
         conOpt = new MqttConnectOptions();
-
+        conOpt.setUserName(sinkConfig.getUserName());
+        conOpt.setPassword(sinkConfig.getPassword().toCharArray());
+        conOpt.setCleanSession(true);
         connect();
     }
 
     private void connect() throws MqttException {
         // Construct an MQTT blocking mode client
         client = new MqttClient(sinkConfig.getBrokerUrl(), clientId);
-
         // Set this wrapper as the callback handler
         client.setCallback(new SinkCallback());
         // Connect to the MQTT server
         client.connect(conOpt);
         logger.info("Connected to {} with client ID {}", sinkConfig.getBrokerUrl(), client.getClientId());
-
     }
 
     @Override
@@ -67,11 +67,14 @@ public class EMQXSink implements Sink<String> {
         String outputTopic = ((String) action.get("topic"));
         //noinspection unchecked
         List<Map<String, Object>> values = (List<Map<String, Object>>) actionMessage.get("values");
+        logger.info("values:" + JsonParser.toJson(values));
         if (!values.isEmpty()) {
             // Forward the first result of the value list
             Map<String, Object> result = values.get(0);
             String payload = JsonParser.toJson(result);
             MqttMessage mqttMessage = new MqttMessage(payload.getBytes());
+            logger.info("outputTopic:" + outputTopic);
+            logger.info("client:" + client.getServerURI());
             client.publish(outputTopic, mqttMessage);
             record.ack();
         }
@@ -85,7 +88,6 @@ public class EMQXSink implements Sink<String> {
     }
 
     class SinkCallback implements MqttCallback {
-
         @Override
         public void connectionLost(Throwable cause) {
             logger.info("Connection to {} lost! {}", sinkConfig.getBrokerUrl(), cause);
@@ -95,14 +97,11 @@ public class EMQXSink implements Sink<String> {
 
         @Override
         public void messageArrived(String topic, MqttMessage message) {
-
         }
 
         @Override
         public void deliveryComplete(IMqttDeliveryToken token) {
-
         }
-
     }
 }
 

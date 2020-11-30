@@ -48,8 +48,7 @@ class User(BaseModel):
     userAuthType = db.Column(db.Integer, server_default='1')  # 1: role 2: role+group
     groups = db.relationship('Group', secondary=UserGroup, lazy='dynamic')
     roleIntID = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    tenantID = db.Column(db.String,
-                         db.ForeignKey('tenants.tenantID'))
+    tenantID = db.Column(db.String, db.ForeignKey('tenants.tenantID'))
 
     @property
     def password(self):

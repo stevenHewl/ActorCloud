@@ -2,7 +2,6 @@ import logging
 
 from app import create_app, project_manage
 
-
 app = create_app()
 
 

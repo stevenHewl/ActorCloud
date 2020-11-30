@@ -4,7 +4,7 @@ from typing import Tuple, AnyStr
 from flask import request, g
 from sqlalchemy import or_
 
-from app.models import Resource, Permission
+from app.services.base.models import Resource, Permission
 from ..errors import AuthFailed
 
 

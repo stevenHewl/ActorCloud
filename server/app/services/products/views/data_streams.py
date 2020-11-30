@@ -7,9 +7,10 @@ from actor_libs.errors import (
 )
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import Product, DataStream, User
-from app.schemas import DataStreamSchema, UpdateDataStreamSchema
-from . import bp
+from app.services.products.models import Product, DataStream
+from app.services.base.models import User
+from app.services.products.schemas import DataStreamSchema, UpdateDataStreamSchema
+from app.services.products.views import bp
 
 
 @bp.route('/data_streams')

@@ -6,8 +6,10 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ReferencedError, DataNotFound
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import Action, User, Device
-from . import bp
+from app.services.rules.models import Action
+from app.services.devices.models import Device
+from app.services.base.models import User
+from app.services.rules.views import bp
 from ..schemas import ActionSchema
 
 

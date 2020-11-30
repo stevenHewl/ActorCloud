@@ -5,9 +5,11 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ReferencedError
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import Application, ApplicationGroup, Group, Role, User
-from app.schemas import ApplicationSchema
-from . import bp
+from app.services.applications.models import Application, ApplicationGroup
+from app.services.devices.models import Group
+from app.services.base.models import Role, User
+from app.services.applications.schemas import ApplicationSchema
+from app.services.applications.views import bp
 
 
 @bp.route('/applications')

@@ -5,8 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from actor_libs.database.orm import db
 from actor_libs.errors import ParameterInvalid, ReferencedError, APIException
 from app import auth
-from app.models import DictCode, Message
-from . import bp
+from app.services.base.models import Message
+from app.services.base.views import bp
 
 
 @bp.route('/messages')

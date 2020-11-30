@@ -10,11 +10,11 @@ from actor_libs.errors import ParameterInvalid
 from actor_libs.types.orm import BaseQueryT
 from actor_libs.utils import format_timestamp
 from app import auth
-from app.models import (
-    Device, DeviceEvent, StreamPoint,
-    DataStream, DataPoint, DeviceEventLatest
-)
-from . import bp
+from app.services.devices.models import Device
+from app.services.device_data.models import DeviceEvent, DeviceEventLatest
+from app.services.products.models import StreamPoint, DataStream, DataPoint
+
+from app.services.device_data.views import bp
 
 
 @bp.route('/devices/<int:device_id>/charts')

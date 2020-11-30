@@ -20,10 +20,11 @@ from actor_libs.schemas.fields import (
     EmqDict, EmqFloat, EmqInteger, EmqList, EmqString
 )
 from actor_libs.utils import generate_uuid
-from app.models import (
-    Device, EndDevice, Gateway, Product,
+from app.services.devices.models import (
+    Device, EndDevice, Gateway,
     Group, GroupDevice, Cert, CertDevice
 )
+from app.services.products.models import Product
 
 
 __all__ = [

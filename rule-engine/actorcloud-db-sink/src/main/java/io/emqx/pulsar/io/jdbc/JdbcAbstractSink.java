@@ -23,6 +23,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * A Simple abstract class for Jdbc sink
  * Users need to implement extractKeyValue function to use this sink
+ *
+ * Apache Pulsar 是一个分布式的发布-订阅消息系统，sink 是 Pulsar 的一个组件，用于将数据导入至其他系统。
+ * 本文介绍了 sink 的功能，并演示了如何创建与使用 JDBC sink 与 MySQL 进行连接。
+ *
  */
 @Slf4j
 public abstract class JdbcAbstractSink<T> implements Sink<T> {
@@ -62,24 +66,27 @@ public abstract class JdbcAbstractSink<T> implements Sink<T> {
             properties.setProperty("password", password);
         }
 
-        connection = JdbcUtils.getConnection(jdbcUrl, properties);
-        connection.setAutoCommit(false);
-        log.info("Opened jdbc connection: {}, autoCommit: {}", jdbcUrl, connection.getAutoCommit());
-        columnList = Arrays.asList(jdbcSinkConfig.getColumns());
-        String tableName = jdbcSinkConfig.getTableName();
-        JdbcUtils.TableId tableId = JdbcUtils.getTableId(connection, tableName);
-        tableDefinition = JdbcUtils.getTableDefinition(connection, tableId);
-        insertStatement = JdbcUtils.buildInsertStatement(connection, JdbcUtils.buildColumnSql(tableDefinition, columnList));
+        try {
+            connection = JdbcUtils.getConnection(jdbcUrl, properties);
+            connection.setAutoCommit(false);
+            log.info("Opened jdbc connection: {}, autoCommit: {}", jdbcUrl, connection.getAutoCommit());
+            columnList = Arrays.asList(jdbcSinkConfig.getColumns());
+            String tableName = jdbcSinkConfig.getTableName();
+            JdbcUtils.TableId tableId = JdbcUtils.getTableId(connection, tableName);
+            tableDefinition = JdbcUtils.getTableDefinition(connection, tableId);
+            insertStatement = JdbcUtils.buildInsertStatement(connection, JdbcUtils.buildColumnSql(tableDefinition, columnList));
 
-        int timeoutMs = jdbcSinkConfig.getTimeoutMs();
-        batchSize = jdbcSinkConfig.getBatchSize();
-        incomingList = Lists.newArrayList();
-        swapList = Lists.newArrayList();
-        isFlushing = new AtomicBoolean(false);
+            int timeoutMs = jdbcSinkConfig.getTimeoutMs();
+            batchSize = jdbcSinkConfig.getBatchSize();
+            incomingList = Lists.newArrayList();
+            swapList = Lists.newArrayList();
+            isFlushing = new AtomicBoolean(false);
 
-        flushExecutor = Executors.newScheduledThreadPool(1);
-        flushExecutor.scheduleAtFixedRate(this::flush, timeoutMs, timeoutMs, TimeUnit.MILLISECONDS);
-
+            flushExecutor = Executors.newScheduledThreadPool(1);
+            flushExecutor.scheduleAtFixedRate(this::flush, timeoutMs, timeoutMs, TimeUnit.MILLISECONDS);
+        }catch (Exception es){
+            es.printStackTrace();
+        }
     }
 
     @Override
@@ -101,19 +108,16 @@ public abstract class JdbcAbstractSink<T> implements Sink<T> {
         synchronized (incomingList) {
             incomingList.add(record);
             number = incomingList.size();
-
         }
         if (number == batchSize) {
             flushExecutor.schedule(this::flush, 0, TimeUnit.MICROSECONDS);
         }
-
     }
 
     // bind value with a PreparedStatement
     protected abstract void bindValue(PreparedStatement statement, Record<T> message) throws Exception;
 
-
-    @SuppressWarnings("unused")
+    //@SuppressWarnings("unused")
     private void flush() {
         // if not in flushing state, do flush, else return;
         if (incomingList.size() > 0 && isFlushing.compareAndSet(false, true)) {
@@ -127,7 +131,6 @@ public abstract class JdbcAbstractSink<T> implements Sink<T> {
             synchronized (incomingList) {
                 List<Record<T>> tmpList;
                 swapList.clear();
-
                 tmpList = swapList;
                 swapList = incomingList;
                 incomingList = tmpList;
@@ -166,11 +169,9 @@ public abstract class JdbcAbstractSink<T> implements Sink<T> {
                 log.error("Got exception ", e);
 //                swapList.forEach(Record::fail);
             }
-
             if (swapList.size() != updateCount) {
                 log.error("Update count {}  not match total number of records {}", updateCount, swapList.size());
             }
-
             // finish flush
             if (log.isDebugEnabled()) {
                 log.debug("Finish flush, queue size: {}", swapList.size());
@@ -183,5 +184,4 @@ public abstract class JdbcAbstractSink<T> implements Sink<T> {
             }
         }
     }
-
 }

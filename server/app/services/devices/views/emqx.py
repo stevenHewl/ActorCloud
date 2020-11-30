@@ -7,8 +7,12 @@ from sqlalchemy import func
 from actor_libs.database.orm import db
 from actor_libs.errors import DataNotFound, AuthFailed
 from actor_libs.http_tools import SyncHttp
-from app.models import Product, Device, DictCode, Cert, ConnectLog, CertDevice, PublishLog
-from . import bp
+from app.services.products.models import Product
+from app.services.devices.models import Device, Cert, CertDevice
+from app.services.base.models import DictCode
+from app.services.device_data.models import ConnectLog
+from app.services.publish.models import PublishLog
+from app.services.devices.views import bp
 
 
 @bp.route('/emqx/auth', methods=['POST'])

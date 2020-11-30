@@ -9,9 +9,10 @@ from actor_libs.schemas import BaseSchema
 from actor_libs.schemas.fields import (
     EmqString, EmqInteger, EmqDateTime, EmqList, EmqEmail, EmqFloat, EmqBool
 )
-from app.models import (
-    User, Tenant, Role, UploadInfo, Group, Invitation
+from app.services.base.models import (
+    User, Tenant, Role, UploadInfo, Invitation
 )
+from app.services.devices.models import Group
 
 
 __all__ = [

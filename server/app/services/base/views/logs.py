@@ -2,9 +2,9 @@ from flask import g, jsonify, request
 
 from app import auth
 
-from app.models import User, LoginLog
+from app.services.base.models import User, LoginLog
 
-from . import bp
+from app.services.base.views import bp
 
 
 @bp.route('/login_logs')

@@ -3,7 +3,7 @@ from flask import jsonify, request
 
 from actor_libs.errors import ParameterInvalid, ResourceLimited
 from app import auth
-from . import bp
+from app.services.device_data.views import bp
 from ._reports_type import REPORTS_TYPE_FUNC
 
 

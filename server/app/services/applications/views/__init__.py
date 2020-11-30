@@ -6,4 +6,4 @@ bp = Blueprint('applications', __name__)
 from . import applications  # noqa: E402
 
 
-__all__ = ['applications']
+__all__ = ['applications', 'bp']

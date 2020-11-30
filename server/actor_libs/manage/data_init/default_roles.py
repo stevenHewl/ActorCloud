@@ -8,7 +8,7 @@ from yaml.loader import FullLoader
 
 from actor_libs.database.orm import db
 from actor_libs.utils import get_cwd
-from app.models import Permission, Resource, Role
+from app.services.base.models import Permission, Resource, Role
 
 
 __all__ = ['init_default_roles', 'update_default_roles']

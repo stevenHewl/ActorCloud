@@ -2,8 +2,8 @@ from flask import request, jsonify
 
 from app import auth
 from actor_libs.errors import ParameterInvalid
-from app.models import ActorTask
-from . import bp
+from app.services.base.models import ActorTask
+from app.services.base.views import bp
 
 
 @bp.route('/task_status')

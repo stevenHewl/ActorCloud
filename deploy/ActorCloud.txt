@@ -1,0 +1,59 @@
+
+ActorCloud运行:
+
+Pulsar 运行
+ActorCloud Rule Engine 运行依赖于 Pulsar
+
+$ cd /opt/pulsar
+$ ./bin/pulsar-daemon start standalone
+
+Rule Engine 运行
+
+# 进入项目运行目录
+$ cd /opt/pulsar/rule_engine
+# rule engine 运行
+$ chmod +x stream-admin
+$ sudo ./stream-admin create all
+
+ActorCloud Server 运行
+ActorCloud Server 采用 Supervisor 运行
+
+Server 初始化
+$ pipenv run flask deploy
+
+Supervisor 配置更新
+$ sudo cp server/config/actorcloud_supervisord.conf /etc/supervisor/conf.d/
+$ sudo supervisorctl update
+
+systemctl start supervisord
+
+Server 运行情况
+systemctl status supervisord
+
+重新加载配置文件
+supervisorctl reload
+
+supervisorctl
+> status           #查看程序状态
+> stop name    #关闭name程序
+> start name    #启动name程序
+> restart name # 重启name程序
+> reread          ＃读取有更新的配置文件，不会启动新添加的程序
+> update          #重启配置文件修改过的程序
+
+
+ActorCloud Admin 配置
+登录admin账户
+使用 ActorCloud server 配置文件中的 admin_email, admin_password 登录 
+
+admin_email: admin@actorcloud.io  # super administrator login username
+admin_password: public  # super administrator login password
+
+
+ ./bin/pulsar-daemon stop/start standalone
+
+ ./rule_engine/stream-admin create all
+
+Redirecting to /bin/systemctl stop agent.service
+Redirecting to /bin/systemctl start agent.service
+

@@ -1,8 +1,8 @@
 from flask import jsonify
 
 from app import auth
-from app.models import Action
-from . import bp
+from app.services.rules.models import Action
+from app.services.rules.views import bp
 
 
 @bp.route('/select_options/actions')

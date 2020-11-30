@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+// 处理数据存入postgres数据库 device_events
 @Slf4j
 public class ActorcloudSink extends JdbcAbstractSink<String> {
     @Override
@@ -36,7 +37,6 @@ public class ActorcloudSink extends JdbcAbstractSink<String> {
         String tenantID = infos[1];
         String deviceID = infos[3];
         String realTopic = infos[4];
-
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<Map<String, Object>>() {
                 }.getType(), new MapJsonDeserializer())
@@ -49,9 +49,10 @@ public class ActorcloudSink extends JdbcAbstractSink<String> {
             throw new Exception("Invalid message: " + input);
         }
 
-        if (payload.isInvalid()) {
-            throw new Exception("Invalid message: " + input);
-        }
+//        if (payload.isInvalid()) {
+//            throw new Exception("Invalid message: " + input);
+//        }
+
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("topic", realTopic);
         columnMap.put("tenantID", tenantID);

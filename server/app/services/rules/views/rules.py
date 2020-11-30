@@ -11,12 +11,12 @@ from actor_libs.errors import (
 )
 from actor_libs.http_tools.sync_http import SyncHttp
 from actor_libs.utils import get_delete_ids, generate_uuid
-from app import auth, logger
-from app.models import (
-    User, Rule, Action, RuleAction
-)
-from . import bp
-from ..schemas import (
+from app import auth
+from app.services.base.models import User
+from app.services.rules.models import Rule, Action, RuleAction
+
+from app.services.rules.views import bp
+from app.services.rules.schemas import (
     AlertActionSchema, EmailActionSchema, RuleSchema, UpdateRuleSchema, PublishActionSchema,
     MqttActionSchema, WebhookActionSchema
 )

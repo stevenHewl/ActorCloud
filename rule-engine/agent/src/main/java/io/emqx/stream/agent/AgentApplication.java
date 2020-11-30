@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import static org.springframework.boot.SpringApplication.run;
 
+// 以服务的形式 运行 rule-function 中的函数
 @SuppressWarnings("unused")
 @SpringBootApplication
 public class AgentApplication {

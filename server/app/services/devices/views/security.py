@@ -9,9 +9,10 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ReferencedError
 from actor_libs.utils import get_delete_ids, generate_uuid
 from app import auth
-from app.models import User, Cert, Device, CertDevice
-from app.schemas import CertSchema, CertDeviceSchema
-from . import bp
+from app.services.base.models import User
+from app.services.devices.models import Cert, Device, CertDevice
+from app.services.devices.schemas import CertSchema, CertDeviceSchema
+from app.services.devices.views import bp
 
 
 @bp.route('/certs')

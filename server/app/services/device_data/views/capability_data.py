@@ -5,11 +5,16 @@ from actor_libs.database.orm import db
 from actor_libs.errors import ParameterInvalid
 from actor_libs.utils import format_timestamp
 from app import auth
-from app.models import (
-    Device, Product, DeviceEvent, DataStream, DataPoint, StreamPoint, Group, GroupDevice,
-    DeviceEventLatest, EndDevice
+from app.services.devices.models import (
+    Device, Group, GroupDevice, EndDevice
 )
-from . import bp
+from app.services.products.models import (
+    Product, DataStream, DataPoint, StreamPoint
+)
+from app.services.device_data.models import (
+    DeviceEvent, DeviceEventLatest
+)
+from app.services.device_data.views import bp
 from ._utils import validate_time_range
 
 

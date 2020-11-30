@@ -2,10 +2,11 @@ from flask import g, jsonify, request
 
 from actor_libs.database.orm import db
 from app import auth
-from app.models import (
-    Device, Group, Product, GroupDevice, Cert, CertDevice
+from app.services.devices.models import (
+    Device, Group, GroupDevice, Cert, CertDevice
 )
-from . import bp
+from app.services.products.models import Product
+from app.services.devices.views import bp
 
 
 @bp.route('/select_options/devices')
@@ -61,27 +62,6 @@ def list_test_center_devices():
                            Product.cloudProtocol,
                            Product.gatewayProtocol) \
             .select_options(attrs=attrs)
-    return jsonify(records)
-
-
-@bp.route('/select_options/products')
-@auth.login_required(permission_required=False)
-def list_select_options_products():
-    product_type = request.args.get('productType', type=int)
-    query = Product.query
-    if product_type == 1:
-        query = query.filter(Product.productType == 1)
-    elif product_type == 2:
-        query = query.filter(Product.productType == 2)
-    attrs = ['productIntID', 'productType', 'cloudProtocol', 'gatewayProtocol']
-    records = query \
-        .with_entities(Product.productID.label('value'),
-                       Product.productName.label('label'),
-                       Product.id.label('productIntID'),
-                       Product.productType,
-                       Product.cloudProtocol,
-                       Product.gatewayProtocol) \
-        .select_options(attrs=attrs)
     return jsonify(records)
 
 

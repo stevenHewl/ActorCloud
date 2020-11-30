@@ -7,7 +7,8 @@ from actor_libs.schemas import BaseSchema
 from actor_libs.schemas.fields import (
     EmqDateTime, EmqInteger, EmqList, EmqString
 )
-from app.models import Group, Application
+from app.services.devices.models import Group
+from app.services.applications.models import Application
 
 
 __all__ = ['ApplicationSchema']

@@ -10,8 +10,9 @@ from actor_libs.schemas import BaseSchema
 from actor_libs.schemas.fields import (
     EmqString, EmqInteger
 )
-from app.models import Device, Product, DictCode, Lwm2mItem
-
+from app.services.devices.models import Device, Lwm2mItem
+from app.services.products.models import Product
+from app.services.base.models import DictCode
 
 __all__ = [
     'PublishSchema'

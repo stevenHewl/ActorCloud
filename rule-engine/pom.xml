@@ -18,14 +18,13 @@
 
   <modules>
     <module>emqx-source</module>
+    <module>topic-distribute-function</module>
     <module>common</module>
+    <module>sql</module>
     <module>rule-function</module>
     <module>agent</module>
-    <module>db-sink</module>
     <module>webhook-sink</module>
-    <module>topic-distribute-function</module>
-    <module>sql</module>
-    <module>client</module>
+<!--    <module>client</module>-->
     <module>actorcloud-db-sink</module>
     <module>mail-sink</module>
     <module>publish-sink</module>

@@ -2,9 +2,9 @@ from flask import jsonify
 
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import StreamPoint, DataStream, DataPoint
-from app.schemas import DataPointSchema, StreamPointsSchema
-from . import bp
+from app.services.products.models import StreamPoint, DataStream, DataPoint
+from app.services.products.schemas import DataPointSchema, StreamPointsSchema
+from app.services.products.views import bp
 
 
 @bp.route('/data_streams/<int:stream_id>/data_points')

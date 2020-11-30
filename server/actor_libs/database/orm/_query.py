@@ -51,22 +51,29 @@ class ExtendQuery(BaseQueryT):
         record = dumps_query_result(query_result, **kwargs)
         return record
 
-    def pagination(self, code_list=None):
+    def pagination(self, code_list=None, is_filter_tenant=True):
         model = self._get_query_model()
-        query = self.filter_tenant()  # filter tenant
+        if is_filter_tenant:
+            query = self.filter_tenant()  # filter tenant
+        else:
+            query = self
         query = sort_query(model=model, query=query)  # sort query
         query = filter_request_args(model=model, query=query)  # filter request args
         return paginate(query, code_list)
 
-    def select_options(self, attrs: list = None, is_limited=True):
+    def select_options(self, attrs: list = None, is_limited=True, is_filter_tenant=True):
         """
         Return select_options record
         :param attrs: attr list
         :param is_limited: Whether to limit the database results,limit 10 records if False
+        :param is_filter_tenant: Whether to filter the tenant
         :return: records
         """
         model = self._get_query_model()
-        query = self.filter_tenant()
+        if is_filter_tenant:
+            query = self.filter_tenant()
+        else:
+            query = self
         query = filter_request_args(model, query)
         query = sort_query(model, query)
 

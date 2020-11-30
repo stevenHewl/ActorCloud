@@ -16,8 +16,8 @@ import java.util.Random;
  * @author Administrator
  *
  */
-@SuppressWarnings("unused")
-abstract class AbstractEMQXSource<T> extends PushSource<T>{
+//@SuppressWarnings("unused")
+public abstract class AbstractEMQXSource<T> extends PushSource<T>{
 
   protected static final Logger logger = LoggerFactory.getLogger(AbstractEMQXSource.class);
   private MqttClient client;
@@ -38,7 +38,11 @@ abstract class AbstractEMQXSource<T> extends PushSource<T>{
             || emqxConfig.getInputTopics() == null) {
       throw new IllegalArgumentException("Required property not set.");
     }
-    clientId = emqxConfig.getClientId() != null ? emqxConfig.getClientId() : "pulsario_" + emqxConfig.getRuleId() + "_" + sourceContext.getInstanceId();
+    int contextId = 0;
+    if (sourceContext != null){
+      contextId = sourceContext.getInstanceId();
+    }
+    clientId = emqxConfig.getClientId() != null ? emqxConfig.getClientId() : "pulsario_" + emqxConfig.getRuleId() + "_" + contextId;
 
     // Construct the connection options object that contains connection parameters
     // such as cleanSession and LWT
@@ -55,7 +59,6 @@ abstract class AbstractEMQXSource<T> extends PushSource<T>{
   private void connect() throws MqttException {
     // Construct an MQTT blocking mode client
     client = new MqttClient(emqxConfig.getBrokerUrl(),clientId);
-
     // Set this wrapper as the callback handler
     client.setCallback(new SourceCallback());
     // Connect to the MQTT server
@@ -89,8 +92,9 @@ abstract class AbstractEMQXSource<T> extends PushSource<T>{
     return buffer.toString();
   }
 
-   @SuppressWarnings("unused")
+//   @SuppressWarnings("unused")
   class SourceCallback implements MqttCallback {
+    @Override
     public void connectionLost(Throwable cause) {
       // Called when the connection to the server has been lost.
       // An application may choose to implement reconnection
@@ -126,8 +130,6 @@ abstract class AbstractEMQXSource<T> extends PushSource<T>{
     }
 
     public void deliveryComplete(IMqttDeliveryToken token) {
-
-
     }
   }
 }

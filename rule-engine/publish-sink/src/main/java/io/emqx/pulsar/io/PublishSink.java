@@ -1,23 +1,29 @@
 package io.emqx.pulsar.io;
 
+import com.google.gson.JsonArray;
 import io.emqx.stream.common.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.pulsar.functions.api.Record;
 import org.apache.pulsar.io.core.Sink;
 import org.apache.pulsar.io.core.SinkContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Slf4j
+// 将消息发布到mqtt组件中
 public class PublishSink implements Sink<String> {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
     private OkHttpClient client;
     private String url;
 
+    private static final Logger logger = LoggerFactory.getLogger(PublishSink.class);
 
     @Override
     public void open(Map<String, Object> config, SinkContext sinkContext) throws Exception {
@@ -29,7 +35,6 @@ public class PublishSink implements Sink<String> {
         if (url == null) {
             throw new IllegalArgumentException("Required publish url not set.");
         }
-
         client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -40,30 +45,34 @@ public class PublishSink implements Sink<String> {
                     return response.request().newBuilder().header("Authorization", credential).build();
                 })
                 .build();
-        log.info("Init client success");
-
-
+        logger.info("Init client success");
     }
 
     @Override
     public void write(Record<String> record) throws Exception {
         String message = record.getValue();
-        log.debug("Receive message {}", message);
+        logger.info("Receive message: {}", message);
         Map<String, Object> actionMessage = JsonParser.parseMqttMessage(message);
         if (actionMessage != null) {
             //noinspection unchecked
             Map<String, Object> action = (Map<String, Object>) actionMessage.get("action");
-            String payload = ((String) action.get("json"));
+            String payload = (String) action.get("json");
+
+            ArrayList<Map<String, Object>> values = (ArrayList<Map<String, Object>>) actionMessage.get("values");
+            String temperature = values.stream().filter(o -> !o.get("temperature").equals(null)).findFirst().get().get("temperature").toString();
+
+            payload = payload.replace("${temperature}", temperature);
+
+            logger.info("payload: " + payload);
             post(url, payload, new HttpCallback(record));
         }
-
     }
 
     @Override
     public void close() {
         client.dispatcher().executorService().shutdown();
         client.connectionPool().evictAll();
-        log.info("Client resources released");
+        logger.info("Client resources released");
     }
 
     private void post(String url, String json, Callback callback) {
@@ -76,9 +85,7 @@ public class PublishSink implements Sink<String> {
     }
 
     class HttpCallback implements Callback {
-
         private final Record record;
-
         HttpCallback(Record record) {
             this.record = record;
         }
@@ -98,17 +105,15 @@ public class PublishSink implements Sink<String> {
         }
     }
 
-
     private static class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             long t1 = System.nanoTime();
             Request request = chain.request();
-            log.debug("Sending request {}", request.url());
+            logger.debug("Sending request {}", request.url());
             Response response = chain.proceed(request);
-
             long t2 = System.nanoTime();
-            log.debug("Received response for {} in {}ms", request.url(), (t2 - t1) / 1e6d);
+            logger.debug("Received response for {} in {}ms", request.url(), (t2 - t1) / 1e6d);
             return response;
         }
     }

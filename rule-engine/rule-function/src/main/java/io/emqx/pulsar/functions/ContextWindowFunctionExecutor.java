@@ -61,7 +61,6 @@ public class ContextWindowFunctionExecutor<I, O> implements Function<I, O> {
   }
 
   private WindowConfig getWindowConfigs(Context context) {
-
     if (!context.getUserConfigValue(WindowConfig.WINDOW_CONFIG_KEY).isPresent()) {
       throw new IllegalArgumentException("Window Configs cannot be found");
     }
@@ -84,10 +83,8 @@ public class ContextWindowFunctionExecutor<I, O> implements Function<I, O> {
   }
 
   protected WindowAllowEmptyManager<I> getWindowManager(WindowConfig windowConfig, Context context) {
-
     WindowLifecycleListener<Event<I>> lifecycleListener = newWindowLifecycleListener(context);
     WindowAllowEmptyManager<I> manager = new WindowAllowEmptyManager<>(lifecycleListener, new ConcurrentLinkedQueue<>());
-
     if (this.windowConfig.getTimestampExtractorClassName() != null) {
       this.timestampExtractor = getTimeStampExtractor(windowConfig);
 
@@ -111,7 +108,6 @@ public class ContextWindowFunctionExecutor<I, O> implements Function<I, O> {
   }
 
   private TimestampExtractor<I> getTimeStampExtractor(WindowConfig windowConfig) {
-
     Class<?> theCls;
     try {
       theCls = Class.forName(windowConfig.getTimestampExtractorClassName(),
@@ -271,9 +267,7 @@ public class ContextWindowFunctionExecutor<I, O> implements Function<I, O> {
     if (!this.initialized) {
       initialize(context);
     }
-
     Record<?> record = context.getCurrentRecord();
-
     if (isEventTime()) {
       long ts = this.timestampExtractor.extractTimestamp(input);
       if (this.waterMarkEventGenerator.track(record.getTopicName().get(), ts)) {

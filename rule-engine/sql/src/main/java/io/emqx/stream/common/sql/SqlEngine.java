@@ -49,6 +49,7 @@ public class SqlEngine implements ISqlEngine {
 
   private IPlan analyze(SelectBody statement) {
     logger.info("analyze");
+    logger.info("statement:" + statement.toString());
     SqlAnalyzer analyzer = new SqlAnalyzer(statement);
     return analyzer.process();
   }

@@ -10,7 +10,7 @@ from actor_libs.schemas import BaseSchema
 from actor_libs.schemas.fields import (
     EmqString, EmqInteger, EmqList, EmqDict
 )
-from app.models import Product, DataStream, DataPoint, Codec
+from app.services.products.models import Product, DataStream, DataPoint, Codec
 
 
 __all__ = [

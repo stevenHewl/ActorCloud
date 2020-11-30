@@ -10,7 +10,6 @@ def actorcloud_run():
 @actorcloud_run.command()
 def backend():
     from manage import app
-
     base_config = BaseConfig().config
     _port = int(base_config['BACKEND_NODE'].split(':')[-1])
     log_level = base_config['LOG_LEVEL']
@@ -24,7 +23,6 @@ def backend():
 @actorcloud_run.command()
 def async_tasks():
     import uvicorn
-
     from app.services.tasks_scheduler.async_tasks.app import app
 
     base_config = BaseConfig().config
@@ -42,15 +40,12 @@ def async_tasks():
 @actorcloud_run.command()
 def timer_tasks():
     import asyncio
-
     import uvloop
     from mode import Worker
-
     from app.services.tasks_scheduler.timer_tasks.app.base import app
 
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     loop = asyncio.get_event_loop()
-
     base_config = BaseConfig().config
     log_level = base_config['LOG_LEVEL']
     worker = Worker(app, loglevel=log_level, loop=loop)
@@ -58,4 +53,5 @@ def timer_tasks():
 
 
 if __name__ == '__main__':
+    backend()
     actorcloud_run()

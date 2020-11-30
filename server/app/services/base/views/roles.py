@@ -7,8 +7,8 @@ from actor_libs.errors import (
     ReferencedError, PermissionDenied, ParameterInvalid
 )
 from app import auth
-from app.models import Role, Resource, Permission
-from . import bp
+from app.services.base.models import Role, Resource, Permission
+from app.services.base.views import bp
 from ..schemas import RoleSchema
 
 

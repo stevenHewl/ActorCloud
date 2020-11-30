@@ -317,12 +317,13 @@ export default {
       this.published = false
       const options = {
         keepalive: this.connect.keepalive,
+        clientid: this.connect.username,
         username: this.connect.username,
         password: this.connect.password,
-        clientId: this.connect.clientId,
         clean: this.connect.clean,
         connectTimeout: 4000,
       }
+      console.info(options)
       this.client = mqtt.connect(this.connect.url, options)
       this.client.on('connect', () => {
         if (this.published) {

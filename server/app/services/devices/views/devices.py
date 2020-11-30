@@ -15,10 +15,12 @@ from actor_libs.http_tools.responses import handle_task_scheduler_response
 from actor_libs.http_tools.sync_http import SyncHttp
 from actor_libs.types.orm import BaseQueryT, BaseModelT
 from actor_libs.utils import get_delete_ids
-from app import auth, excels, logger
-from app.models import Device, Product, EndDevice, Gateway, User
-from app.schemas import EndDeviceSchema, GatewaySchema
-from . import bp
+from app import auth, excels
+from app.services.devices.models import Device, EndDevice, Gateway
+from app.services.products.models import Product
+from app.services.base.models import User
+from app.services.devices.schemas import EndDeviceSchema, GatewaySchema
+from app.services.devices.views import bp
 
 
 @bp.route('/devices')

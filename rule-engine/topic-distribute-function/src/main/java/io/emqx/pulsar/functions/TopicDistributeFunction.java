@@ -5,6 +5,9 @@ import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 
 /**
+ *
+ * 对source输出的消息转发到pulsar上
+ *
  *  Predefined function for redistributing EMQX messages into multiple pulsar topics
  *  The input topic must be the output topic of the AC EMQX source
  *
@@ -17,6 +20,7 @@ public class TopicDistributeFunction implements Function<String, Void> {
     if(messages.length == 3){
       String topic = messages[0].replaceAll("/", "%%");
       context.getLogger().info("Publish to topic {}", topic);
+//      context.getLogger().info("message： {}", message);
       context.publish(topic, message);
     }else{
       context.getLogger().error("Invalid input message {}", message);

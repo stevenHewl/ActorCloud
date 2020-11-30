@@ -1,8 +1,9 @@
 from flask import jsonify
 
 from app import auth
-from app.models import Device, DeviceEvent, DeviceEventLatest
-from . import bp
+from app.services.devices.models import Device
+from app.services.device_data.models import DeviceEvent, DeviceEventLatest
+from app.services.device_data.views import bp
 from ._utils import validate_time_range
 
 

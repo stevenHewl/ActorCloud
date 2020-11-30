@@ -7,20 +7,21 @@ import okhttp3.*;
 import org.apache.pulsar.functions.api.Record;
 import org.apache.pulsar.io.core.Sink;
 import org.apache.pulsar.io.core.SinkContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
+// 将消息输出到指定的站点连接上
 public class WebhookSink implements Sink<String> {
-
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
     private OkHttpClient client;
 
+    private static final Logger logger = LoggerFactory.getLogger(WebhookSink.class);
 
-    @SuppressWarnings("RedundantThrows")
+//    @SuppressWarnings("RedundantThrows")
     @Override
     public void open(Map<String, Object> config, SinkContext sinkContext) throws Exception {
         client = new OkHttpClient.Builder()
@@ -28,33 +29,40 @@ public class WebhookSink implements Sink<String> {
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(new LoggingInterceptor())
+                .authenticator((route, response) -> {
+                    String credential = Credentials.basic("actorcloud", "Mjk1OTU3Mzg1NDM2ODM4Nzc0MzAzMzE3NDI0MDUzOTQ0MzC");
+                    return response.request().newBuilder().header("Authorization", credential).build();
+                })
                 .build();
-        log.info("Init client success");
-
-
+        logger.info("Init client success");
     }
 
     @Override
     public void write(Record<String> record) throws Exception {
-        String message = record.getValue();
-        log.debug("Receive message {}", message);
-        Map<String, Object> actionMessage = JsonParser.parseMqttMessage(message);
-        if (actionMessage != null) {
-            //noinspection unchecked
-            Map<String, Object> action = (Map<String, Object>) actionMessage.get("action");
-            WebhookActionConfig webhookActionConfig = WebhookActionConfig.load(action);
-            String url = webhookActionConfig.getUrl();
-            post(url, message, new WebhookCallback(record));
+        try {
+            String message = record.getValue();
+            logger.debug("Receive message: {}", message);
+            Map<String, Object> actionMessage = JsonParser.parseMqttMessage(message);
+            if (actionMessage != null) {
+                //noinspection unchecked
+                Map<String, Object> action = (Map<String, Object>) actionMessage.get("action");
+                WebhookActionConfig webhookActionConfig = WebhookActionConfig.load(action);
+                String url = webhookActionConfig.getUrl();
+                logger.debug("url: {}", url);
+                post(url, message, new WebhookCallback(record));
+            }
+        } catch(Exception es){
+            es.printStackTrace();
+            logger.info("Exception: " + es.getLocalizedMessage());
         }
-
     }
 
-    @SuppressWarnings("RedundantThrows")
+//    @SuppressWarnings("RedundantThrows")
     @Override
     public void close() throws Exception {
         client.dispatcher().executorService().shutdown();
         client.connectionPool().evictAll();
-        log.info("Client resources released");
+        logger.info("Client resources released");
     }
 
     private void post(String url, String json, Callback callback) {
@@ -89,20 +97,18 @@ public class WebhookSink implements Sink<String> {
         }
     }
 
-
-    @SuppressWarnings("unused")
+    //@SuppressWarnings("unused")
     private static class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             long t1 = System.nanoTime();
             Request request = chain.request();
-            log.debug("Sending request {}", request.url());
+            logger.debug("Sending request {}", request.url());
             Response response = chain.proceed(request);
 
             long t2 = System.nanoTime();
-            log.debug("Received response for {} in {}ms", request.url(), (t2 - t1) / 1e6d);
+            logger.debug("Received response for {} in {}ms", request.url(), (t2 - t1) / 1e6d);
             return response;
         }
     }
-
 }

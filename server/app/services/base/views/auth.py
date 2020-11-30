@@ -11,10 +11,12 @@ from actor_libs.errors import (
     AuthFailed, DataNotFound, FormInvalid
 )
 from app import auth
-from app.models import (
+from app.services.base.models import (
     Invitation, LoginLog, Resource, Tenant, UploadInfo, User
 )
-from . import bp
+
+
+from app.services.base.views import bp
 from ..schemas import LoginSchema, TenantSchema, UserSchema
 
 

@@ -4,8 +4,8 @@ from flask import jsonify, g, request
 from sqlalchemy import or_
 
 from app import auth
-from app.models import DictCode, Role
-from . import bp
+from app.services.base.models import DictCode, Role
+from app.services.base.views import bp
 
 
 @bp.route('/select_options/dict_code')

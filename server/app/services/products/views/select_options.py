@@ -2,8 +2,8 @@ from flask import request, jsonify
 
 from actor_libs.errors import ParameterInvalid
 from app import auth
-from app.models import Product, DataStream, DataPoint, StreamPoint
-from . import bp
+from app.services.products.models import Product, DataStream, DataPoint, StreamPoint
+from app.services.products.views import bp
 
 
 @bp.route('/select_options/products')

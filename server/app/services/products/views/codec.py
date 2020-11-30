@@ -15,9 +15,11 @@ from actor_libs.errors import (
 )
 from actor_libs.http_tools.sync_http import SyncHttp
 from actor_libs.utils import get_cwd, get_host_ip, get_delete_ids
-from app import auth, logger
-from app.models import DataStream, DataPoint, Product, Device, Codec, User, Tenant, DictCode
-from . import bp
+from app import auth
+from app.services.products.models import DataStream, DataPoint, Product, Codec
+from app.services.devices.models import Device
+from app.services.base.models import User, Tenant, DictCode
+from app.services.products.views import bp
 from ..schemas import CodeRunSchema, DecodeSchema, CodecSchema, CodecAdminSchema
 
 

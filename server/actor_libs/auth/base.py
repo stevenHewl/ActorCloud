@@ -1,11 +1,12 @@
 # coding: utf-8
 
 import arrow
-from flask import current_app, request, g
+from flask import current_app, g
 from itsdangerous import TimedJSONWebSignatureSerializer as JWT
 
 from actor_libs.errors import AuthFailed
-from app.models import Application, User
+from app.services.applications.models import Application
+from app.services.base.models import User
 
 
 __all__ = ['basic_auth', 'token_auth']

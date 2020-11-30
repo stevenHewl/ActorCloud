@@ -8,8 +8,9 @@ from actor_libs.errors import ReferencedError, ParameterInvalid, AuthFailed
 from actor_libs.send_mails import send_html
 from actor_libs.utils import get_delete_ids
 from app import auth
-from app.models import User, Role, Invitation, UserGroup, Group
-from . import bp
+from app.services.devices.models import Group
+from app.services.base.models import User, Role, Invitation, UserGroup
+from app.services.base.views import bp
 from ..schemas import UserSchema, UpdateUserSchema, ResetPasswordSchema, InvitationSchema
 
 
